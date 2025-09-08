@@ -16,8 +16,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/', include('backend.catalog.urls')),
-]
+from django.http import HttpResponse
 
+def home(_):
+    return HttpResponse("Backend OK")
+
+urlpatterns = [
+    path("", home, name="home"),
+    path("admin/", admin.site.urls),
+    path("api/", include("api.urls")),      # <— AÑADIDO (conecta health y registros)
+    path("api/", include("catalog.urls")),  # si ya lo tienes para /api/books/, déjalo
+]
