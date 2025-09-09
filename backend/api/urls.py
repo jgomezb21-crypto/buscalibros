@@ -6,6 +6,6 @@ router = DefaultRouter()
 router.register("registros", RegistroViewSet, basename="registro")
 
 urlpatterns = [
-    path("health/", health),
-    path("", include(router.urls)),
+    path("health/", health),  # Ruta para la vista de salud
+    path("", include(router.urls)),  # Rutas generadas por el router
 ]

@@ -1,7 +1,3 @@
-"""
-Django settings for core project.
-"""
-
 from pathlib import Path
 import os
 
@@ -10,7 +6,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # ──────────────────────────────────────────────────────────────────────────────
 # Básicos
 # ──────────────────────────────────────────────────────────────────────────────
-SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "dev-only-unsafe")
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "dev-only-unsafe")  # Puedes ajustar esto en producción
 DEBUG = os.environ.get("DEBUG", "1") == "1"
 ALLOWED_HOSTS = os.environ.get(
     "ALLOWED_HOSTS", "localhost,127.0.0.1,0.0.0.0"
@@ -32,12 +28,12 @@ INSTALLED_APPS = [
     "rest_framework",
     "django_filters",
     # Local apps
-    "api",       # ← NECESARIO para que el modelo Registro exista
-    # "catalog", # ← si estás usando la app de libros (/api/books)
+    "api",  # ← El app está en backend/api
+    # "catalog",  # Solo si necesitas usarlo
 ]
 
 # ──────────────────────────────────────────────────────────────────────────────
-# Middleware (CORS lo más arriba posible, antes de CommonMiddleware)
+# Middleware (CORS lo más arriba posible)
 # ──────────────────────────────────────────────────────────────────────────────
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -50,8 +46,15 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+# ──────────────────────────────────────────────────────────────────────────────
+# URLs
+# ──────────────────────────────────────────────────────────────────────────────
 ROOT_URLCONF = "core.urls"
+WSGI_APPLICATION = "core.wsgi.application"
 
+# ──────────────────────────────────────────────────────────────────────────────
+# Templates
+# ──────────────────────────────────────────────────────────────────────────────
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -67,15 +70,13 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "core.wsgi.application"
-
 # ──────────────────────────────────────────────────────────────────────────────
 # Base de datos
 # ──────────────────────────────────────────────────────────────────────────────
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",  # Asegúrate de que esta ruta es válida
     }
 }
 
@@ -98,7 +99,7 @@ USE_I18N = True
 USE_TZ = True
 
 # ──────────────────────────────────────────────────────────────────────────────
-# Static
+# Static files
 # ──────────────────────────────────────────────────────────────────────────────
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
@@ -107,11 +108,11 @@ STATICFILES_DIRS = [BASE_DIR / "static"] if (BASE_DIR / "static").exists() else 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # ──────────────────────────────────────────────────────────────────────────────
-# CORS / CSRF (Vite en 5173-5176; agrego localhost y 127.0.0.1)
+# CORS / CSRF Configuration
 # ──────────────────────────────────────────────────────────────────────────────
 FRONTEND_ORIGINS = os.environ.get(
     "FRONTEND_ORIGINS",
-    ",".join([
+    ",".join([  # Ajusta si necesitas otros dominios o puertos
         "http://localhost:5173", "http://localhost:5174", "http://localhost:5175", "http://localhost:5176",
         "http://127.0.0.1:5173", "http://127.0.0.1:5174", "http://127.0.0.1:5175", "http://127.0.0.1:5176",
     ]),
@@ -121,10 +122,10 @@ CORS_ALLOWED_ORIGINS = FRONTEND_ORIGINS
 CORS_ALLOW_CREDENTIALS = True
 CORS_URLS_REGEX = r"^/api/.*$"
 
-CSRF_TRUSTED_ORIGINS = FRONTEND_ORIGINS  # deben llevar esquema + host + puerto
+CSRF_TRUSTED_ORIGINS = FRONTEND_ORIGINS  # Asegúrate de incluir el esquema y el puerto
 
 # ──────────────────────────────────────────────────────────────────────────────
-# DRF
+# DRF (Django Rest Framework)
 # ──────────────────────────────────────────────────────────────────────────────
 REST_FRAMEWORK = {
     "DEFAULT_FILTER_BACKENDS": [
@@ -134,5 +135,5 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 20,
-    # "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.AllowAny"],  # si quieres todo abierto en dev
+    # "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.AllowAny"],  # Abierto para desarrollo, pero ajusta para producción
 }

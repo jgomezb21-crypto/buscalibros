@@ -1,42 +1,118 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+:root{
+  /* === Colores de la biblioteca (cámbialos aquí) === */
+  --brand:#2456ff;   /* primario */
+  --brand2:#1326cc;  /* primario oscuro */
+  --accent:#00c2a8;  /* acento opcional */
+
+  /* Neutros */
+  --bg:#f7f7fb; --surface:#ffffff; --text:#0f172a; --muted:#6b7280; --border:#e5e7eb;
+
+  /* Estados */
+  --ok:#16a34a; --bad:#dc2626;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+/* Reset mínimo */
+*{box-sizing:border-box}
+html,body,#root{height:100%}
+body{margin:0; font-family:ui-sans-serif,system-ui,Segoe UI,Roboto,Arial; color:var(--text); background:var(--bg)}
+
+/* Layout */
+.wrap{max-width:1100px; margin:0 auto; padding:24px 20px 64px}
+h1,h2{letter-spacing:-0.02em}
+
+/* Header / estado */
+.hero{margin:8px 0 18px}
+.hero h1{margin:0 0 6px; font-size:28px; font-weight:800}
+.hero p{margin:0; color:var(--muted); font-size:14px}
+.hero code{background:#eef2ff; padding:.1rem .35rem; border-radius:.4rem}
+.ok{color:var(--ok)} .bad{color:var(--bad)}
+
+/* Toolbar */
+.toolbar{
+  display:grid; grid-template-columns: 1fr 1fr 200px; gap:12px;
+  margin:18px 0 8px;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+@media (max-width: 800px){ .toolbar{grid-template-columns:1fr} }
+
+.input,.select{
+  width:100%; height:40px; padding:0 12px; font-size:14px;
+  border:1px solid var(--border); border-radius:10px; background:#fff; outline:none;
 }
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.input:focus,.select:focus{
+  border-color:var(--brand);
+  box-shadow:0 0 0 3px rgba(37,99,235,0.15);
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Título sección */
+h2{margin:16px 0 10px; font-size:18px}
+
+/* Grid de tarjetas */
+.grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px,1fr));
+  gap:14px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:14px;
+  cursor:pointer;
+  box-shadow:0 1px 1px rgba(0,0,0,.03);
+  transition:transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+  min-height:150px;
+}
+.card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 24px rgba(0,0,0,.06);
+  border-color: color-mix(in oklab, var(--brand) 18%, var(--border));
 }
 
-.card {
-  padding: 2em;
-}
+.card-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:8px}
+.badge{font-size:12px; background: color-mix(in oklab, var(--brand) 18%, #eef2ff); color: color-mix(in oklab, var(--brand2) 70%, #111); padding:.15rem .5rem; border-radius:999px}
+.id{font-size:12px; color:var(--muted)}
 
-.read-the-docs {
-  color: #888;
+.title{margin:.1rem 0 .35rem; font-size:16px; font-weight:800}
+.meta{display:grid; grid-template-columns: repeat(3, 1fr); gap:8px; margin:8px 0 2px}
+.meta dt{font-size:11px; color:var(--muted)}
+.meta dd{margin:0; font-size:13px}
+
+/* Paginación */
+.pager{display:flex; gap:10px; justify-content:center; margin:16px 0 0}
+.btn{
+  background:#fff; border:1px solid var(--border); border-radius:10px;
+  padding:8px 12px; font-size:14px; cursor:pointer;
 }
+.btn:hover{border-color:#cbd5e1}
+.btn:disabled{opacity:.5; cursor:not-allowed}
+
+/* Estados / mensajes */
+.muted{color:var(--muted)}
+.err{color:#b91c1c; background:#fee2e2; border:1px solid #fecaca; padding:8px 12px; border-radius:10px}
+
+/* Loader esqueletos */
+.skeleton{
+  position:relative; overflow:hidden; min-height:150px;
+  background:linear-gradient(90deg, #fafafa 25%, #f0f0f0 37%, #fafafa 63%);
+  background-size:400% 100%; animation:shine 1.1s infinite ease-in-out;
+  border-radius:14px; border:1px solid var(--border);
+}
+@keyframes shine{0%{background-position:100% 0}100%{background-position:0 0}}
+
+/* Modal */
+.modal{
+  position:fixed; inset:0; background:rgba(0,0,0,.45);
+  display:flex; align-items:center; justify-content:center; padding:16px; z-index:50;
+}
+.modal-card{
+  position:relative;
+  background:#fff; max-width:520px; width:100%; border-radius:16px; padding:18px 18px 22px;
+  border:1px solid var(--border); box-shadow:0 24px 60px rgba(0,0,0,.2);
+}
+.close{
+  position:absolute; top:10px; right:10px; width:32px; height:32px;
+  border-radius:8px; border:1px solid var(--border); background:#fff; cursor:pointer; font-size:18px;
+}
+.close:hover{background:#f8fafc}
+.detail{padding-left:16px; line-height:1.8}
